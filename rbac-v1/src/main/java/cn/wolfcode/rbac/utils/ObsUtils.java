@@ -4,9 +4,7 @@ import cn.wolfcode.rbac.domain.Face;
 import cn.wolfcode.rbac.domain.vo.R;
 import com.obs.services.ObsClient;
 import com.obs.services.exception.ObsException;
-import com.obs.services.model.PutObjectRequest;
-import com.obs.services.model.PutObjectResult;
-import com.obs.services.model.UploadFileRequest;
+import com.obs.services.model.*;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,30 +31,18 @@ public class ObsUtils {
     @Autowired
     private FaceUtils faceUtils;
 
-//    private byte[] preprocessImage(byte[] imageBytes) throws IOException {
-//        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageBytes);
-//        BufferedImage originalImage = ImageIO.read(byteArrayInputStream);
-//
-//        // 灰度化
-//        BufferedImage grayImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
-//        grayImage.getGraphics().drawImage(originalImage, 0, 0, null);
-//
-//        // 直方图均衡化
-//        BufferedImage equalizedImage = new BufferedImage(grayImage.getWidth(), grayImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
-//        equalizedImage.getGraphics().drawImage(grayImage, 0, 0, null);
-//
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        ImageIO.write(equalizedImage, "jpg", byteArrayOutputStream);
-//        return byteArrayOutputStream.toByteArray();
-//    }
-
+    //先预处理图像，后上传至Obs
     public String uploadImage(String base64Image, String objectKey) throws IOException {
         ObsClient obsClient = null;
         try {
             obsClient = createObsClient();
             byte[] imageBytes = Base64.decodeBase64(base64Image);
-            // 对图像进行灰度化和直方图均衡化预处理
+            // 对图像进行灰度化和直方图均衡化预处理并裁剪出人脸
             imageBytes = faceUtils.detectAndCropFace(imageBytes);
+            if (imageBytes == null) {
+                // 没有检测到人脸，返回特定的错误标识
+                return "NO_FACE_DETECTED";
+            }
             ByteArrayInputStream inputStream = new ByteArrayInputStream(imageBytes);
             //传入Obs中
             obsClient.putObject("rjwd", objectKey, inputStream);
@@ -72,4 +58,39 @@ public class ObsUtils {
             }
         }
     }
+
+    //从Obs端下载图片到本地
+    public void downloadImage(String objectKey, String localFilePath) throws Exception {
+        ObsClient obsClient = null;
+        try {
+            obsClient = createObsClient();
+            ObsObject obsObject = obsClient.getObject(new GetObjectRequest("rjwd", objectKey));
+            InputStream inputStream = obsObject.getObjectContent();
+
+            // 将输入流写入文件
+            File file = new File(localFilePath);
+            // 确保文件的父目录存在
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                byte[] bytes = new byte[1024];
+                int read;
+                while ((read = inputStream.read(bytes)) != -1) {
+                    outputStream.write(bytes, 0, read);
+                }
+            } finally {
+                inputStream.close();
+            }
+        } finally {
+            if (obsClient != null) {
+                try {
+                    obsClient.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 }

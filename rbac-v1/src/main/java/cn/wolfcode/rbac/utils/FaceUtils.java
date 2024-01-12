@@ -1,16 +1,18 @@
 package cn.wolfcode.rbac.utils;
 
 import org.opencv.core.*;
+import org.opencv.face.FaceRecognizer;
+import org.opencv.face.LBPHFaceRecognizer;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class FaceUtils {
@@ -64,5 +66,35 @@ public class FaceUtils {
         MatOfByte mob = new MatOfByte();
         Imgcodecs.imencode(".png", mat, mob);
         return mob.toArray();
+    }
+
+    //人脸模型训练
+    public void trainEmployeePhotos(String folderPath, int employeeId) {
+        FaceRecognizer faceRecognizer = LBPHFaceRecognizer.create();
+        File directory = new File(folderPath);
+
+        FilenameFilter imgFilter = (dir, name) -> {
+            name = name.toLowerCase();
+            return name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".jpeg");
+        };
+
+        File[] imageFiles = directory.listFiles(imgFilter);
+        List<Mat> images = new ArrayList<>();
+        List<Integer> labels = new ArrayList<>();
+
+        if (imageFiles != null) {
+            for (File imageFile : imageFiles) {
+                Mat img = Imgcodecs.imread(imageFile.getAbsolutePath(), Imgcodecs.IMREAD_GRAYSCALE);
+                images.add(img);
+                labels.add(employeeId);
+            }
+        }
+        //如果文件夹中没有图片，则向前端返回错误
+
+        MatOfInt labelsMat = new MatOfInt();
+        labelsMat.fromList(labels);
+        faceRecognizer.train(images, labelsMat);
+
+        faceRecognizer.save("employee" + employeeId + "_model.xml");
     }
 }

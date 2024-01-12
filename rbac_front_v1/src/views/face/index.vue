@@ -33,7 +33,7 @@ export default {
       let base64Image = canvas.toDataURL('image/png');
       // 去除Base64字符串中的前缀
       base64Image = base64Image.replace(/^data:image\/png;base64,/, '');
-      console.log(base64Image); // 打印到控制台或发送到后端
+      //console.log(base64Image); // 打印到控制台或发送到后端
 
       this.sendImageToBackend(base64Image);
 
@@ -45,8 +45,13 @@ export default {
           employeeId: this.employeeId,
           // 可以添加其他需要的数据
         };
-        await this.$http.post('/upload-image', payload);
-        console.log('Image sent to backend successfully');
+        const response = await this.$http.post('/upload-image', payload);
+        if(response.data.status === 'fail'){
+          if(response.data.msg === 'No face detected in the image.'){
+            alert("未检测到人脸，请重新拍照！");
+          }
+        }
+        else {alert("上传成功！")}
       } catch (error) {
         console.error('Error sending the image to backend:', error);
       }
