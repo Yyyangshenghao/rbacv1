@@ -20,14 +20,18 @@ public class FaceUtils {
 
     public FaceUtils() {
         // 初始化人脸检测器，您需要指定Haar级联文件的路径
-        this.faceDetector = new CascadeClassifier("src/main/resources/classifiers/haarcascade_frontalface_default.xml");
+        this.faceDetector = new CascadeClassifier("E:\\IDEA CODE\\rbacv1\\rbac-v1\\src\\main\\resources\\classifiers\\haarcascade_frontalface_default.xml");
     }
 
+    //裁剪出灰度人脸图片
     public byte[] detectAndCropFace(byte[] imageBytes) throws IOException {
         Mat src = Imgcodecs.imdecode(new MatOfByte(imageBytes), Imgcodecs.IMREAD_UNCHANGED);
 
         MatOfRect faceDetections = new MatOfRect();
-        faceDetector.detectMultiScale(src, faceDetections);
+
+        Size minSize = new Size(200, 200);
+        Size maxSize = new Size(600, 600);
+        faceDetector.detectMultiScale(src, faceDetections,1.01,5,0,minSize,maxSize);
 
         for (Rect rect : faceDetections.toArray()) {
             // 裁剪人脸区域
@@ -58,7 +62,7 @@ public class FaceUtils {
 
     private byte[] matToByteArray(Mat mat) throws IOException {
         MatOfByte mob = new MatOfByte();
-        Imgcodecs.imencode(".jpg", mat, mob);
+        Imgcodecs.imencode(".png", mat, mob);
         return mob.toArray();
     }
 }
