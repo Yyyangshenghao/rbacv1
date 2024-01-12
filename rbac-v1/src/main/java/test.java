@@ -8,7 +8,7 @@ import org.opencv.imgproc.Imgproc;
 public class test {
     static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
     public static void main(String[] args) {
-        
+        System.out.println("你好，我是AMD");
     }
 }
 
