@@ -1,0 +1,9 @@
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/finalexp?useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true&useSSL=false&TimeZone=Asia/Shanghai
+#    username: root
+#    password: qq2471117875
+#
+#
+#
