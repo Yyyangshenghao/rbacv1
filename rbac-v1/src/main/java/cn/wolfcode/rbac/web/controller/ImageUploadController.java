@@ -27,7 +27,7 @@ public class ImageUploadController {
             Long employeeId = request.getEmployeeId();
 
             // 这里处理base64Image，转换并上传到OBS
-            String fileUrl = obsUtils.uploadImage(base64Image,"employee-photos/" + employeeId + "-" + UUID.randomUUID().toString() + ".png");
+            String fileUrl = obsUtils.uploadImage(base64Image,"employee-photos/" + employeeId + "/" +  employeeId + "-" + UUID.randomUUID().toString() + ".png");
             System.out.println(fileUrl);
             return R.ok("Image uploaded successfully. URL: " + fileUrl);
 
