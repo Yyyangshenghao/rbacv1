@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 
 @Mapper
-public interface FaceRecognitionMapper {
+public interface FaceMapper {
 
     int insert(Face face);
 
