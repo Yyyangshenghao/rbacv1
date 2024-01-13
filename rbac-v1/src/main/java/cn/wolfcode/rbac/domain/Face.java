@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class Face {
     private Long employeeId;
-    private String faceImageData;
+    private String objectKey;
 }

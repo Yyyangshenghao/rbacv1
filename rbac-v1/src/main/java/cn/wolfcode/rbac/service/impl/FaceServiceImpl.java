@@ -6,10 +6,11 @@ import cn.wolfcode.rbac.service.IFaceService;
 import org.springframework.stereotype.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 
 
 @Service
-public class FaceImpl implements IFaceService {
+public class FaceServiceImpl implements IFaceService {
 
     @Autowired
     private FaceMapper faceMapper;
@@ -21,10 +22,9 @@ public class FaceImpl implements IFaceService {
     }
 
     @Override
-    public void save(Long employeeId, String Url) {
-        faceMapper.save(employeeId,Url);
+    public Face selectById(Long employeeId) {
+        Assert.notNull(employeeId, "非法参数");
+        return faceMapper.selectById(employeeId);
     }
-
-
 }
 

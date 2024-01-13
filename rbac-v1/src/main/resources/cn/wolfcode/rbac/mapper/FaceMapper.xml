@@ -4,17 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.wolfcode.rbac.mapper.FaceMapper">
     <insert id="insert" parameterType="cn.wolfcode.rbac.domain.Face">
-        INSERT INTO face (employee_id, face_image_data) VALUES (#{employeeId}, #{faceImageData})
+        INSERT INTO face (employee_id, object_key) VALUES (#{employeeId}, #{objectKey})
     </insert>
-    <insert id="save" parameterType="cn.wolfcode.rbac.domain.Face">
-        insert into face (employee_id, face_image_data) VALUES (#{employeeId}, #{Url})
-    </insert>
-
-    <update id="updateById" parameterType="cn.wolfcode.rbac.domain.Face">
-        update face set face_image_data=#{faceImageData} where employee_id=#{employeeID}
-    </update>
 
     <select id="selectById" parameterType="java.lang.Long" resultType="cn.wolfcode.rbac.domain.Face">
-        SELECT * FROM face WHERE employee_id = #{employeeId}
+        SELECT object_key FROM face WHERE employee_id = #{employeeId}
     </select>
+
+    <update id="updateById" parameterType="cn.wolfcode.rbac.domain.Face">
+        update face set object_key=#{objectKey} where employee_id=#{employeeID}
+    </update>
+
+
 </mapper>

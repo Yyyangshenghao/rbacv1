@@ -31,7 +31,7 @@ public class FaceUtils {
 
         MatOfRect faceDetections = new MatOfRect();
 
-        Size minSize = new Size(200, 200);
+        Size minSize = new Size(150, 150);
         Size maxSize = new Size(600, 600);
         faceDetector.detectMultiScale(src, faceDetections,1.01,5,0,minSize,maxSize);
 

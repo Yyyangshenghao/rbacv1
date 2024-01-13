@@ -1,11 +1,11 @@
 package cn.wolfcode.rbac.web.controller;
 
+import cn.wolfcode.rbac.domain.Face;
 import cn.wolfcode.rbac.domain.vo.ImageUploadRequest;
 import cn.wolfcode.rbac.domain.vo.R;
+import cn.wolfcode.rbac.service.IFaceService;
 import cn.wolfcode.rbac.utils.ObsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,20 +14,24 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/image")
 public class ImageUploadController {
 
     @Autowired
     private ObsUtils obsUtils;
+
+    @Autowired
+    private IFaceService faceService;
 
     @PostMapping("/upload-image")
     public R uploadImage(@RequestBody ImageUploadRequest request) {
         try {
             String base64Image = request.getBase64Image();
             Long employeeId = request.getEmployeeId();
+            String objectKey = "employee-photos/" + employeeId + "/" +  employeeId + "-" + UUID.randomUUID().toString() + ".png";
 
             // 这里处理base64Image，转换并上传到OBS
-            String fileUrl = obsUtils.uploadImage(base64Image,"employee-photos/" + employeeId + "/" +  employeeId + "-" + UUID.randomUUID().toString() + ".png");
+            String fileUrl = obsUtils.uploadImage(base64Image,objectKey);
             System.out.println(fileUrl);
 
             //在uploadImage方法的处理中未裁剪出人脸的情况
@@ -36,10 +40,16 @@ public class ImageUploadController {
                 return R.error("No face detected in the image.");
             }
 
+            Face face = new Face();
+            face.setEmployeeId(employeeId);
+            face.setObjectKey(objectKey);
+            faceService.insert(face);
             return R.ok("Image uploaded successfully. URL: " + fileUrl);
 
         } catch (Exception e) {
             return R.error("Error uploading image: " + e.getMessage());
         }
     }
+
+
 }

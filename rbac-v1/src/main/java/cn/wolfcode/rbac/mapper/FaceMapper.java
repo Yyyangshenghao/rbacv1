@@ -10,7 +10,8 @@ public interface FaceMapper {
     int insert(Face face);
 
     Face selectById(Long employeeId);
+
     int updateById(Long employeeId);
 
-    int save(Long employeeId, String Url);
+
 }

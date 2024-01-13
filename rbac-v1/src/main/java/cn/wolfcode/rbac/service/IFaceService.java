@@ -5,5 +5,5 @@ import cn.wolfcode.rbac.domain.Face;
 public interface IFaceService {
     void insert(Face face);
 
-    void save(Long employeeId, String Url);
+    Face selectById(Long employeeId);
 }

@@ -45,7 +45,7 @@ export default {
           employeeId: this.employeeId,
           // 可以添加其他需要的数据
         };
-        const response = await this.$http.post('/upload-image', payload);
+        const response = await this.$http.post('/image/upload-image', payload);
         if(response.data.status === 'fail'){
           if(response.data.msg === 'No face detected in the image.'){
             alert("未检测到人脸，请重新拍照！");
