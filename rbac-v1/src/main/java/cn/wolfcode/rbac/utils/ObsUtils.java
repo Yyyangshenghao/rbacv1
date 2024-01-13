@@ -32,7 +32,7 @@ public class ObsUtils {
     private FaceUtils faceUtils;
 
     //先预处理图像，后上传至Obs
-    public String uploadImage(String base64Image, String objectKey) throws IOException {
+    public String uploadImage(String base64Image, String objectKey) {
         ObsClient obsClient = null;
         try {
             obsClient = createObsClient();
@@ -60,7 +60,7 @@ public class ObsUtils {
     }
 
     //从Obs端下载图片到本地
-    public void downloadImage(String objectKey, String localFilePath) throws Exception {
+    public void downloadImage(String objectKey, String localFilePath) throws IOException {
         ObsClient obsClient = null;
         try {
             obsClient = createObsClient();

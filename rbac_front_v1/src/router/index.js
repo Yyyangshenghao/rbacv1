@@ -57,10 +57,10 @@ const routes = [{
         path: "/face",
         component: Face
       },
-      {
-        path: "/recognition",
-        component: Recognition
-      },
+      // {
+      //   path: "/recognition",
+      //   component: Recognition
+      // },
     ]
   },
 ]

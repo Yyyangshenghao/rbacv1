@@ -22,11 +22,11 @@ public class FaceUtils {
 
     public FaceUtils() {
         // 初始化人脸检测器，您需要指定Haar级联文件的路径
-        this.faceDetector = new CascadeClassifier("E:\\IDEA CODE\\rbacv1\\rbac-v1\\src\\main\\resources\\classifiers\\haarcascade_frontalface_default.xml");
+        this.faceDetector = new CascadeClassifier("rbac-v1/src/main/resources/classifiers/haarcascade_frontalface_default.xml");
     }
 
     //裁剪出灰度人脸图片
-    public byte[] detectAndCropFace(byte[] imageBytes) throws IOException {
+    public byte[] detectAndCropFace(byte[] imageBytes) {
         Mat src = Imgcodecs.imdecode(new MatOfByte(imageBytes), Imgcodecs.IMREAD_UNCHANGED);
 
         MatOfRect faceDetections = new MatOfRect();
@@ -62,14 +62,14 @@ public class FaceUtils {
         return equalizedFace;
     }
 
-    private byte[] matToByteArray(Mat mat) throws IOException {
+    private byte[] matToByteArray(Mat mat) {
         MatOfByte mob = new MatOfByte();
         Imgcodecs.imencode(".png", mat, mob);
         return mob.toArray();
     }
 
     //人脸模型训练
-    public void trainEmployeePhotos(String folderPath, int employeeId) {
+    public void train(Long employeeId,String folderPath) throws IOException {
         FaceRecognizer faceRecognizer = LBPHFaceRecognizer.create();
         File directory = new File(folderPath);
 
@@ -79,22 +79,26 @@ public class FaceUtils {
         };
 
         File[] imageFiles = directory.listFiles(imgFilter);
+
+        if (imageFiles == null || imageFiles.length == 0) {
+            // 如果文件夹中没有图像文件，抛出异常
+            throw new IOException("No images found in directory: " + folderPath);
+        }
+
         List<Mat> images = new ArrayList<>();
         List<Integer> labels = new ArrayList<>();
 
-        if (imageFiles != null) {
-            for (File imageFile : imageFiles) {
-                Mat img = Imgcodecs.imread(imageFile.getAbsolutePath(), Imgcodecs.IMREAD_GRAYSCALE);
-                images.add(img);
-                labels.add(employeeId);
-            }
+        for (File imageFile : imageFiles) {
+            Mat img = Imgcodecs.imread(imageFile.getAbsolutePath(), Imgcodecs.IMREAD_GRAYSCALE);
+            images.add(img);
+            labels.add(Math.toIntExact(employeeId));
         }
-        //如果文件夹中没有图片，则向前端返回错误
 
         MatOfInt labelsMat = new MatOfInt();
         labelsMat.fromList(labels);
         faceRecognizer.train(images, labelsMat);
 
-        faceRecognizer.save("employee" + employeeId + "_model.xml");
+        String modelPath = "rbac-v1/src/main/resources/models/employee" + employeeId + "_model.xml";
+        faceRecognizer.save(modelPath);
     }
 }

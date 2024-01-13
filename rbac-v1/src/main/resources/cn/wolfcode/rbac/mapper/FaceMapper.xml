@@ -7,8 +7,9 @@
         INSERT INTO face (employee_id, object_key) VALUES (#{employeeId}, #{objectKey})
     </insert>
 
-    <select id="selectById" parameterType="java.lang.Long" resultType="cn.wolfcode.rbac.domain.Face">
+    <select id="selectById" parameterType="java.lang.Long" resultType="java.lang.String">
         SELECT object_key FROM face WHERE employee_id = #{employeeId}
+        order by employee_id
     </select>
 
     <update id="updateById" parameterType="cn.wolfcode.rbac.domain.Face">

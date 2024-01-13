@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
+import java.util.List;
+
 
 @Service
 public class FaceServiceImpl implements IFaceService {
@@ -22,7 +24,7 @@ public class FaceServiceImpl implements IFaceService {
     }
 
     @Override
-    public Face selectById(Long employeeId) {
+    public List<String> selectById(Long employeeId) {
         Assert.notNull(employeeId, "非法参数");
         return faceMapper.selectById(employeeId);
     }

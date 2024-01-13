@@ -1,8 +1,17 @@
 <template>
-  <div class="camera">
-    <video ref="video" width="640" height="480" autoplay></video>
-    <button @click="captureAndProcessImage">拍照并处理</button>
-    <canvas ref="canvas" width="640" height="480" style="display: none;"></canvas>
+  <div>
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/main' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>人脸识别</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-card class="box-card">
+      <div class="camera">
+        <video ref="video" width="640" height="480" autoplay></video>
+        <el-button class="button-spacing" type="primary" @click="captureAndProcessImage">拍照并处理</el-button>
+        <el-button class="button-spacing" type="success" @click="trainFaceData">开始训练人脸数据</el-button>
+        <canvas ref="canvas" width="640" height="480" style="display: none;"></canvas>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -55,7 +64,23 @@ export default {
       } catch (error) {
         console.error('Error sending the image to backend:', error);
       }
-    }
+    },
+    async trainFaceData() {
+      try {
+        const response = await this.$http.post('/face/train', {
+          employeeId: this.employeeId// 传递必要的参数，比如员工ID
+        });
+
+        if (response.data.status === 'success') {
+          alert('人脸数据训练开始');
+        } else {
+          alert('人脸数据训练请求失败');
+        }
+      } catch (error) {
+        console.error('Error sending training request:', error);
+      }
+    },
+
   },
   mounted() {
     this.setupCamera();
@@ -64,9 +89,19 @@ export default {
 </script>
 
 <style scoped>
+.box-card {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
 .camera {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 20px;
+}
+
+.button-spacing {
+  margin: 10px; /* 上下左右都添加10px的间距 */
 }
 </style>

@@ -2,8 +2,10 @@ package cn.wolfcode.rbac.service;
 
 import cn.wolfcode.rbac.domain.Face;
 
+import java.util.List;
+
 public interface IFaceService {
     void insert(Face face);
 
-    Face selectById(Long employeeId);
+    List<String> selectById(Long employeeId);
 }
