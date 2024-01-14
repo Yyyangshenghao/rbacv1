@@ -12,11 +12,15 @@ import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Component
 public class FaceUtils {
     static {System.loadLibrary(Core.NATIVE_LIBRARY_NAME);}
+
+    // 置信度阈值
+    private static final double CONFIDENCE_THRESHOLD = 50.0; // 示例阈值
 
     private CascadeClassifier faceDetector;
 
@@ -102,6 +106,44 @@ public class FaceUtils {
         faceRecognizer.save(modelPath);
     }
 
+    /**
+     * 识别由Base64编码的单个人脸图像。
+     * @param base64Image Base64编码的人脸图像
+     * @param modelPath 人脸识别模型的路径
+     * @return 识别出的用户ID，如果没有匹配则返回"Not recognized"。
+     */
+    public boolean recognizeFace(String base64Image, String modelPath) {
+        try {
+            // 将Base64编码的图像转换为字节数组
+            byte[] imageBytes = Base64.getDecoder().decode(base64Image);
 
+            // 使用detectAndCropFace方法来检测和裁剪人脸
+            byte[] faceBytes = detectAndCropFace(imageBytes);
+            if (faceBytes == null) {
+                return false; //没有检测到人脸
+            }
+
+            // 将裁剪后的人脸字节数组转换成OpenCV的Mat对象
+            Mat face = Imgcodecs.imdecode(new MatOfByte(faceBytes), Imgcodecs.IMREAD_GRAYSCALE);
+
+            // 加载人脸识别模型
+            FaceRecognizer faceRecognizer = LBPHFaceRecognizer.create();
+            faceRecognizer.read(modelPath);
+
+            // 创建一个数组来存储预测结果
+            int[] label = new int[1];
+            double[] confidence = new double[1];
+
+            // 进行人脸识别
+            faceRecognizer.predict(face, label, confidence);
+
+            // 检查置信度
+            return confidence[0] < CONFIDENCE_THRESHOLD; // 置信度低于阈值，认为识别成功
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // 在发生异常时返回false
+        }
+    }
 
 }

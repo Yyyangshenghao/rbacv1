@@ -49,11 +49,12 @@ export default {
 
       try {
         // 发送图像到后端进行识别
-        const response = await this.$http.post('/face/recognize', { image: base64Image });
-        if (response.data.status === 'success') {
-          alert('识别成功: ' + response.data.user);
-        } else {
-          alert('识别失败');
+        const response = await this.$http.post('/face/recognize', {
+          image: base64Image,
+          employeeId: window.sessionStorage.getItem("userId")
+        });
+        if (response.data.status === "success") {
+          alert('识别成功: ' + response.data.msg);
         }
       } catch (error) {
         console.error('Error during face recognition:', error);

@@ -1,20 +1,13 @@
 package cn.wolfcode.rbac.utils;
 
-import cn.wolfcode.rbac.domain.Face;
-import cn.wolfcode.rbac.domain.vo.R;
 import com.obs.services.ObsClient;
 import com.obs.services.exception.ObsException;
 import com.obs.services.model.*;
-import org.apache.logging.log4j.core.Filter;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.UUID;
 
 @Component
 public class ObsUtils {
@@ -59,8 +52,8 @@ public class ObsUtils {
         }
     }
 
-    //从Obs端下载图片到本地
-    public void downloadImage(String objectKey, String localFilePath) throws IOException {
+    //从Obs端下载文件到本地
+    public void downloadFile(String objectKey, String localFilePath) throws IOException {
         ObsClient obsClient = null;
         try {
             obsClient = createObsClient();
@@ -94,17 +87,33 @@ public class ObsUtils {
     }
 
     public void uploadModel(String objectKey, String localModelPath) throws ObsException, IOException {
-        ObsClient obsClient = null;
-        try{
-            obsClient = createObsClient();
+        try (ObsClient obsClient = createObsClient()) {
             File modelFile = new File(localModelPath);
             if (!modelFile.exists()) {
                 throw new RuntimeException("Model file does not exist at: " + localModelPath);
             }
-            obsClient.putObject("rjwd",objectKey,modelFile);
-        } finally {
-            obsClient.close();
+            obsClient.putObject("rjwd", objectKey, modelFile);
         }
     }
 
+    public boolean checkFileExists(String objectKey) {
+        ObsClient obsClient = null;
+        try {
+            obsClient = createObsClient();
+            // 使用OBS SDK的方法来检查文件是否存在
+            boolean doesObjectExist = obsClient.doesObjectExist("rjwd", objectKey);
+            return doesObjectExist;
+        } catch (ObsException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (obsClient != null) {
+                try {
+                    obsClient.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

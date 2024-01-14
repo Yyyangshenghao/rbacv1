@@ -1,19 +1,19 @@
 package cn.wolfcode.rbac.web.controller;
 
-import cn.wolfcode.rbac.domain.Face;
 import cn.wolfcode.rbac.domain.vo.R;
+import cn.wolfcode.rbac.domain.vo.RecognitionRequest;
 import cn.wolfcode.rbac.domain.vo.TrainRequest;
 import cn.wolfcode.rbac.service.impl.FaceServiceImpl;
 import cn.wolfcode.rbac.utils.FaceUtils;
 import cn.wolfcode.rbac.utils.ObsUtils;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.obs.services.exception.ObsException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -27,6 +27,7 @@ public class FaceController{
     private ObsUtils obsUtils;
     @Autowired
     private FaceUtils faceUtils;
+
 
     @PostMapping("/train")
     public R trainPhotos(@RequestBody TrainRequest trainRequest) {
@@ -52,7 +53,7 @@ public class FaceController{
             //从Obs下载图片到本地保存
             for (String filename : objectKeys) {
                 String localImagePath = imagesDirectoryPath + filename;
-                obsUtils.downloadImage(filename, localImagePath);
+                obsUtils.downloadFile(filename, localImagePath);
             }
             //训练模型
             String modelPath = imagesDirectoryPath + "employee-photos/" + employeeId;
@@ -70,5 +71,30 @@ public class FaceController{
         }
     }
 
+    @PostMapping("/recognize")
+    public R recognizeFace(@RequestBody RecognitionRequest recognitionRequest){
+        try {
+            //从Obs下载模型到本地保存
+            Long employeeId = recognitionRequest.getEmployeeId();
+            String filename = "models/employee" + employeeId + "_model.xml";
+            String localModelPath = "rbac-v1/src/main/resources/" + filename;
+            // 检查本地是否已有模型文件，如果没有，则从OBS下载
+            if (!Files.exists(Paths.get(localModelPath))) {
+                obsUtils.downloadFile(filename, localModelPath);
+            }
 
+            //将传入的base64编码进行识别
+            String base64Image = recognitionRequest.getImage();
+            boolean isRecognized = faceUtils.recognizeFace(base64Image, localModelPath);
+
+            if(isRecognized){
+                return R.ok("Face recognized successfully.");
+            } else{
+                return R.error("Face not recognized");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return R.error("An error occurred while processing the image.");
+        }
+    }
 }
