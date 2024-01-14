@@ -93,4 +93,18 @@ public class ObsUtils {
         }
     }
 
+    public void uploadModel(String objectKey, String localModelPath) throws ObsException, IOException {
+        ObsClient obsClient = null;
+        try{
+            obsClient = createObsClient();
+            File modelFile = new File(localModelPath);
+            if (!modelFile.exists()) {
+                throw new RuntimeException("Model file does not exist at: " + localModelPath);
+            }
+            obsClient.putObject("rjwd",objectKey,modelFile);
+        } finally {
+            obsClient.close();
+        }
+    }
+
 }

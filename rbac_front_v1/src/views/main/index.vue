@@ -80,11 +80,11 @@ export default {
               name: "人脸上传",
               path: '/face'
             },
-            // {
-            //   id: 15,
-            //   name: "人脸识别测试",
-            //   path: '/recognition'
-            // },
+            {
+              id: 15,
+              name: "人脸识别",
+              path: '/recognition'
+            },
 
           ],
         },

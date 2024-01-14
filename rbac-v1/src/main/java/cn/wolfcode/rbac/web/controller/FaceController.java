@@ -7,6 +7,7 @@ import cn.wolfcode.rbac.service.impl.FaceServiceImpl;
 import cn.wolfcode.rbac.utils.FaceUtils;
 import cn.wolfcode.rbac.utils.ObsUtils;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
+import com.obs.services.exception.ObsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class FaceController{
         } catch (Exception e) {
             return R.error("获取人脸数据失败：" + e.getMessage());
         }
-
+        //设置图片保存路径
         String imagesDirectoryPath = "rbac-v1/src/main/resources/images/";
         File imagesDirectory = new File(imagesDirectoryPath);
         if (!imagesDirectory.exists()) {
@@ -48,15 +49,24 @@ public class FaceController{
         }
 
         try {
+            //从Obs下载图片到本地保存
             for (String filename : objectKeys) {
                 String localImagePath = imagesDirectoryPath + filename;
                 obsUtils.downloadImage(filename, localImagePath);
             }
+            //训练模型
+            String modelPath = imagesDirectoryPath + "employee-photos/" + employeeId;
+            faceUtils.train(employeeId, modelPath);
 
-            faceUtils.train(employeeId, imagesDirectoryPath + "employee-photos/" + employeeId);
-            return R.ok("训练成功");
+            //上传Obs
+            String savePath = "models/employee" + employeeId + "_model.xml";
+            String modelFile = "rbac-v1/src/main/resources/models/employee" + employeeId + "_model.xml";
+            obsUtils.uploadModel(savePath, modelFile);
+            return R.ok("训练成功,并上传到Obs");
         } catch (IOException e) {
             return R.error("训练模型失败：" + e.getMessage());
+        } catch (ObsException e) {
+            return R.error("上传模型到OBS失败：" + e.getMessage());
         }
     }
 
