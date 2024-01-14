@@ -5,12 +5,14 @@ import cn.wolfcode.rbac.domain.Employee;
 import cn.wolfcode.rbac.domain.vo.LoginInfoVo;
 import cn.wolfcode.rbac.domain.vo.R;
 import cn.wolfcode.rbac.service.ILoginService;
+import cn.wolfcode.rbac.utils.ObsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -22,7 +24,8 @@ import java.util.Map;
 public class LoginApiController {
 
     @Autowired
-    private ILoginService loginService;
+    private ILoginService   loginService;
+
     //验证码请求
     @GetMapping("code")
     @ResponseBody
@@ -40,7 +43,7 @@ public class LoginApiController {
     }
 
     //登录请求
-    @PostMapping("logout")
+    @GetMapping("logout")
     @ResponseBody
     public R logout(HttpServletRequest request)  {
         loginService.logout(request.getHeader(Constants.USER_ID));

@@ -14,6 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -71,5 +76,31 @@ public class LoginServiceImpl implements ILoginService {
         Assert.notNull(loginEmployeeJson,"非法参数");
         redisUtils.del(Constants.LOGIN_EMPLOYEE+":"+userId);
         redisUtils.del(Constants.EXPRESSION+":"+userId);
+
+        try {
+            // 删除模型文件
+            String modelFilePath = "rbac-v1/src/main/resources/models/" + "employee" + userId + "_model.xml";
+            Files.deleteIfExists(Paths.get(modelFilePath));
+
+            // 删除用户的图片文件夹
+            Path imagesDirectoryPath = Paths.get("rbac-v1/src/main/resources/images/employee-photos/" + userId);
+            if (Files.exists(imagesDirectoryPath)) {
+                deleteDirectoryStream(imagesDirectoryPath);
+            }
+        } catch (IOException ignored) {
+        }
+    }
+    public void deleteDirectoryStream(Path path) throws IOException {
+        // 使用try-with-resources确保DirectoryStream被正确关闭
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
+            for (Path entry : stream) {
+                if (Files.isDirectory(entry)) {
+                    deleteDirectoryStream(entry); // 递归删除子目录
+                } else {
+                    Files.delete(entry); // 删除文件
+                }
+            }
+        }
+        Files.delete(path); // 删除目录本身
     }
 }

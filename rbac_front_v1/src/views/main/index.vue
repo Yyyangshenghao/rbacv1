@@ -106,7 +106,7 @@ export default {
     async logout(){
       // 发送请求退出
       const { data: res } = await this.$http.get("logout");
-      if (res.code != 200) {
+      if (res.code !== 200) {
         console.log("退出失败");
       } else {
         console.log("退出成功");

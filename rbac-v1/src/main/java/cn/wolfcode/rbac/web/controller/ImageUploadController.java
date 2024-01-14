@@ -6,15 +6,13 @@ import cn.wolfcode.rbac.domain.vo.R;
 import cn.wolfcode.rbac.service.IFaceService;
 import cn.wolfcode.rbac.utils.ObsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/image")
+@CrossOrigin(allowCredentials="true")
 public class ImageUploadController {
 
     @Autowired
