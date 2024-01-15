@@ -2,24 +2,24 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/main' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>部门管理</el-breadcrumb-item>
-      <el-breadcrumb-item>部门列表</el-breadcrumb-item>
+      <el-breadcrumb-item>班级管理</el-breadcrumb-item>
+      <el-breadcrumb-item>班级列表</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card class="box-card">
       <el-button type="primary" @click="dialogFormVisible = true"
-        >添加部门</el-button
+        >添加班级</el-button
       >
       <el-table :data="departmentlist" stripe border>
         <el-table-column type="index"></el-table-column>
-        <el-table-column prop="id" label="部门标识"></el-table-column>
-        <el-table-column prop="name" label="部门名称"></el-table-column>
-        <el-table-column prop="sn" label="部门编号"></el-table-column>
+        <el-table-column prop="id" label="班级标识"></el-table-column>
+        <el-table-column prop="name" label="班级名称"></el-table-column>
+        <el-table-column prop="sn" label="班级编号"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-tooltip
               class="item"
               effect="dark"
-              content="编辑部门"
+              content="编辑班级"
               placement="top"
             >
               <el-button
@@ -32,7 +32,7 @@
             <el-tooltip
               class="item"
               effect="dark"
-              content="删除部门"
+              content="删除班级"
               placement="top"
             >
               <el-button
@@ -57,15 +57,15 @@
       </el-pagination>
     </el-card>
     <el-dialog
-      title="添加部门"
+      title="添加班级"
       :visible.sync="dialogFormVisible"
       @close="addDialogClosed"
     >
       <el-form :model="addForm" ref="addFormRefs" label-width="70px">
-        <el-form-item label="部门名称" label-width="120px" prop="name">
+        <el-form-item label="班级名称" label-width="120px" prop="name">
           <el-input v-model="addForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="部门编号" label-width="120px" prop="sn">
+        <el-form-item label="班级编号" label-width="120px" prop="sn">
           <el-input v-model="addForm.sn"></el-input>
         </el-form-item>
       </el-form>
@@ -75,15 +75,15 @@
       </div>
     </el-dialog>
     <el-dialog
-      title="修改部门"
+      title="修改班级"
       :visible.sync="editDialogVisible"
       @close="editDialogClosed"
     >
       <el-form :model="editForm" ref="editFormRefs" label-width="70px">
-        <el-form-item label="部门名称" label-width="120px" prop="name">
+        <el-form-item label="班级名称" label-width="120px" prop="name">
           <el-input v-model="editForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="部门编号" label-width="120px" prop="sn">
+        <el-form-item label="班级编号" label-width="120px" prop="sn">
           <el-input v-model="editForm.sn"></el-input>
         </el-form-item>
       </el-form>
@@ -127,12 +127,12 @@ export default {
       });
       console.log(res);
       if (res.code == 200) {
-        this.$message.success("获取部门信息成功");
+        this.$message.success("获取班级信息成功");
         this.departmentlist = res.data.list;
         this.totalCount = res.data.total;
         console.log(this.departmentlist);
       } else {
-        this.$message.error("获取部门信息失败");
+        this.$message.error("获取班级信息失败");
       }
     },
     handleSizeChange: function (pageSize) {
@@ -153,9 +153,9 @@ export default {
       );
       console.log(res);
       if (res.code != 200) {
-        this.$message.error("添加部门失败");
+        this.$message.error("添加班级失败");
       } else {
-        this.$message.success("添加部门成功");
+        this.$message.success("添加班级成功");
         this.getDepartmentList();
       }
       this.dialogFormVisible = false;
@@ -167,7 +167,7 @@ export default {
       console.log(id);
       const { data: res } = await this.$http.get("department/info/" + id);
       if (res.code != 200) {
-        this.$message.error("查询部门信息失败");
+        this.$message.error("查询班级信息失败");
       } else {
         this.editDialogVisible = true;
         this.editForm = res.data;
@@ -177,15 +177,15 @@ export default {
     async editDepartment() {
       const { data: res } = await this.$http.post("department/saveOrUpdate",this.editForm);
       if (res.code != 200) {
-        this.$message.error("修改部门信息失败");
+        this.$message.error("修改班级信息失败");
       } else {
-        this.$message.success("修改部门信息成功");
+        this.$message.success("修改班级信息成功");
         this.getDepartmentList();
       }
       this.editDialogVisible=false;	
     },
     async deleteDialog(id){
-        const result=await this.$confirm('此操作将永久删除该部门信息, 是否继续?','提示',{
+        const result=await this.$confirm('此操作将永久删除该班级信息, 是否继续?','提示',{
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -197,9 +197,9 @@ export default {
         if(result=="confirm"){
             const {data:res}=await this.$http.delete("department/delete/"+id);
             if(res.code!=200){
-                this.$message.error("删除部门信息失败");
+                this.$message.error("删除班级信息失败");
             }else{
-                this.$message.success("删除部门信息成功");
+                this.$message.success("删除班级信息成功");
                 this.getDepartmentList();
             }
         }
