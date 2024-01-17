@@ -11,8 +11,11 @@
 
 <script>
 export default {
-  name: "FaceRecognitionComponent",
-
+  data() {
+    return {
+      attendanceId: ''
+    };
+  },
   mounted() {
     this.setupCamera();
     this.startFaceDetection();
@@ -46,7 +49,6 @@ export default {
 
       let base64Image = canvas.toDataURL('image/png');
       base64Image = base64Image.replace(/^data:image\/png;base64,/, '');
-
       try {
         // 发送图像到后端进行识别
         const response = await this.$http.post('/face/recognize', {
@@ -54,12 +56,36 @@ export default {
           employeeId: window.sessionStorage.getItem("userId")
         });
         if (response.data.status === "success") {
-          alert('识别成功: ' + response.data.msg);
+          alert("签到成功！");
+          await this.updateAttendanceRecord();
         }
       } catch (error) {
         console.error('Error during face recognition:', error);
       }
+    },
+    // 更新出勤记录的方法
+    async updateAttendanceRecord() {
+      try {
+        let attendanceId = this.attendanceId;
+        // 使用反引号 ` 来确保模板字符串正确工作
+        const { data: res } = await this.$http.post(`/attendance/update/${attendanceId}`);
+        // 检查响应中的状态
+        if (res.code === 200) {
+          alert('签到记录更新成功');
+          // 在这里添加其他成功后的逻辑
+        } else {
+          // 处理更新失败的情况
+          alert('签到记录更新失败: ' + updateResponse.data.msg);
+        }
+      } catch (error) {
+        console.error('Error during attendance record update:', error);
+      }
     }
+
+  },
+  created() {
+    this.attendanceId = this.$route.query.attendanceId;
+    // 在这里你可以根据 attendanceId 做进一步的操作
   }
 };
 </script>

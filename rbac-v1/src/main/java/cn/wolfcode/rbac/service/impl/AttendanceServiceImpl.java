@@ -4,6 +4,7 @@ import cn.wolfcode.rbac.domain.Attendance;
 import cn.wolfcode.rbac.domain.vo.AttendanceRequest;
 import cn.wolfcode.rbac.domain.vo.PageResult;
 import cn.wolfcode.rbac.domain.vo.Signin;
+import cn.wolfcode.rbac.domain.vo.StudentSignIn;
 import cn.wolfcode.rbac.mapper.AttendanceMapper;
 import cn.wolfcode.rbac.service.IAttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,16 @@ public class AttendanceServiceImpl implements IAttendanceService {
     @Override
     public List<Signin> getSignin(int attendanceId) {
         return attendanceMapper.getSignin(attendanceId);
+    }
+
+    @Override
+    public List<StudentSignIn> list(Long studentId) {
+        return attendanceMapper.listforstudent(studentId);
+    }
+
+    @Override
+    public void updateAtt(int attendanceId) {
+        attendanceMapper.updateAtt(attendanceId);
     }
 
 }

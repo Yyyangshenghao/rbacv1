@@ -39,4 +39,11 @@ public class AttendanceController {
         List<Signin> signin = attendanceService.getSignin(attendanceId);
         return R.ok(signin);
     }
+
+    @ResponseBody
+    @PostMapping("/update")
+    public R update(@PathVariable int attendanceId){
+        attendanceService.updateAtt(attendanceId);
+        return R.ok();
+    }
 }

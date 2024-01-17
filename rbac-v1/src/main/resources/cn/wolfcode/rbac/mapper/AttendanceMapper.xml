@@ -8,6 +8,12 @@
         INSERT INTO attendance (class_id, status, start_time, end_time) VALUES (#{classId}, 0, #{startTime}, #{endTime})
     </insert>
 
+    <update id="updateAtt" parameterType="int">
+        UPDATE attendance_student
+        SET status = 1
+        WHERE attendance_id = #{attendanceId}
+    </update>
+
     <select id="selectStudentIdsByClassId" parameterType="int" resultType="java.lang.Long">
         SELECT employee_id FROM class_student WHERE class_id = #{classId} ORDER BY class_id
     </select>
@@ -37,6 +43,26 @@
         FROM attendance_student
         JOIN employee ON employee_id = id
         WHERE attendance_id = #{attendanceId}
+    </select>
+
+    <select id="listforstudent" parameterType="Long" resultType="cn.wolfcode.rbac.domain.vo.StudentSignIn">
+        SELECT
+            a.id,
+            co.course_name AS courseName,
+            e.name AS teacherName,
+            a.status
+        FROM
+            class_student cs
+                INNER JOIN
+            class cl ON cs.class_id = cl.id
+                INNER JOIN
+            course co ON cl.course_id = co.id
+                INNER JOIN
+            employee e ON cl.teacher_id = e.id
+                INNER JOIN
+            attendance a ON cl.id = a.class_id
+        WHERE
+            cs.employee_id = #{employeeId}
     </select>
 
 </mapper>
