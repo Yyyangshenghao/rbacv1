@@ -12,6 +12,5 @@ public class Employee {
     private String email;// 邮箱
     private int age;// 年龄
     private boolean admin; // 是否是管理员
-    private Department department; // 部门
-    private String faceImageData; //人脸数据
+    private Department department; // 班级
 }

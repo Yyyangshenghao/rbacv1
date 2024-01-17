@@ -10,5 +10,4 @@ public class EmployeeVo {
     private String email;// 邮箱
     private int age;// 年龄
     private long deptId; // 部门id
-    private String faceImageData; //人脸数据
 }

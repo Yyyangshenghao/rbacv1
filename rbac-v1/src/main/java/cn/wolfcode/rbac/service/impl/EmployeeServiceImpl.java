@@ -28,6 +28,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     public List<Employee> selectAll() {
         return employeeMapper.selectAll();
     }
+
     @Override
     public PageResult<Employee> selectByPage(EmployeeQueryObject qo) {
         PageHelper.startPage(qo.getPageNum(),qo.getPageSize());
@@ -97,11 +98,5 @@ public class EmployeeServiceImpl implements IEmployeeService {
     public Employee selectById(Long id) {
         Assert.notNull(id,"非法參數");
         return employeeMapper.selectById(id);
-    }
-
-    @Override
-    @Transactional
-    public void updateFaceData(Long employeeId, String faceImageData) {
-        employeeMapper.updateFaceData(employeeId,faceImageData);
     }
 }

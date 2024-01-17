@@ -46,14 +46,6 @@ public class EmployeeApiController {
         return R.ok(employeeService.selectById(id));
     }
 
-//    @PostMapping("/saveOrUpdate")
-//    @ResponseBody
-//    @RequirePermission({"员工保存或更新","employee:saveOrUpdate"})
-//    public R saveOrUpdate(@RequestBody Employee employee){
-//        employeeService.saveOrUpadate(employee);
-//        return R.ok("保存或者更新成功");
-//    }
-
     @PostMapping("/saveOrUpdate")
     @ResponseBody
     @RequirePermission({"员工保存或更新","employee:saveOrUpdate"})
@@ -69,19 +61,4 @@ public class EmployeeApiController {
         employeeService.updateStateById(adminStateVo);
         return R.ok("保存或者更新成功");
     }
-
-    @PostMapping("/updateFaceData")
-    @ResponseBody
-    public R updateFaceData(@RequestParam("employeeId") Long employeeId,
-                            @RequestParam("faceImageData") String faceImageData) {
-        try {
-            employeeService.updateFaceData(employeeId, faceImageData);
-            return R.ok("人脸数据更新成功");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return R.error("更新人脸数据时出错: " + e.getMessage());
-        }
-    }
-
-
 }

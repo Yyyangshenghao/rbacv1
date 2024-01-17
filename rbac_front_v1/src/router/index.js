@@ -11,6 +11,10 @@ import NoPermission from '../views/nopermission'
 import Welcome from '../views/welcome'
 import Face from "@/views/face";
 import Recognition from "@/views/recognition";
+import Course from "@/views/course";
+import Class from "@/views/class";
+import Attendance from "@/views/attendance";
+import Signin from "@/views/signin";
 Vue.use(VueRouter)
 
 const routes = [{
@@ -60,6 +64,22 @@ const routes = [{
       {
         path: "/recognition",
         component: Recognition
+      },
+      {
+        path: "/course",
+        component: Course
+      },
+      {
+        path: "/class",
+        component: Class
+      },
+      {
+        path: "/attendance",
+        component: Attendance
+      },
+      {
+        path: "/signin",
+        component: Signin
       },
     ]
   },

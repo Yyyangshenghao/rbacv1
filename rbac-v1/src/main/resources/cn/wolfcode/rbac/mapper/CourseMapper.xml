@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.rbac.mapper.CourseMapper">
+    <sql id="selectCourse">
+        select c.id, c.course_name, c.credit, c.hour
+        from course c
+    </sql>
+
+    <resultMap id="courseRst" type="Course">
+    <id column="id" property="id"></id>
+    <result column="course_name" property="courseName"></result>
+    <result column="credit" property="credit"></result>
+    <result column="hour" property="hour"></result>
+    </resultMap>
+
+    <select id="selectAll" resultMap="courseRst">
+        <include refid="selectCourse"></include>
+        order by c.id
+    </select>
+
+    <select id="selectById" parameterType="int" resultMap="courseRst">
+        <include refid="selectCourse"></include>
+        where c.id = #{id}
+    </select>
+
+    <delete id="deleteById" parameterType="int">
+        delete from course where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="Course" useGeneratedKeys="true" keyProperty="id">
+        insert into course (course_name, credit, hour)
+        values (#{courseName}, #{credit}, #{hour})
+    </insert>
+
+    <update id="updateById" parameterType="Course">
+        update course set course_name = #{courseName}, credit = #{credit}, hour = #{hour}
+        where id = #{id}
+    </update>
+
+    <select id="queryForList" resultMap="courseRst" parameterType="cn.wolfcode.rbac.domain.query.CourseQueryObject">
+        <include refid="selectCourse"></include>
+        <where>
+            <if test="keyword != null and keyword.trim() != ''">
+                and (c.course_name like concat('%', #{keyword}, '%'))
+            </if>
+        </where>
+        order by c.id
+    </select>
+
+</mapper>

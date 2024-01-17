@@ -20,7 +20,6 @@
         <result column="email" property="email"></result>
         <result column="age" property="age"></result>
         <result column="admin" property="admin"></result>
-        <result column="face_image_data" property="faceImageData"></result>
         <association property="department" javaType="Department">
             <id column="did" property="id"></id>
             <result column="dname" property="name"></result>
@@ -43,22 +42,18 @@
     </delete>
 
     <insert id="insert" parameterType="Employee" useGeneratedKeys="true" keyProperty="id">
-        insert into employee(name,password,email,age,admin,dept_id,face_image_data)
-        values(#{name},#{password},#{email},#{age},#{admin},#{department.id}, #{faceImageData})
+        insert into employee(name,password,email,age,admin,dept_id)
+        values(#{name},#{password},#{email},#{age},#{admin},#{department.id})
     </insert>
 
     <update id="updateById" parameterType="Employee">
         update employee set name=#{name},password=#{password},
-           email=#{email},age=#{age},admin=#{admin},dept_id=#{department.id},face_image_data=#{faceImageData}
+           email=#{email},age=#{age},admin=#{admin},dept_id=#{department.id}
         where id=#{id}
     </update>
 
     <update id="updateStateById">
         update employee set admin=#{admin} where id=#{id}
-    </update>
-
-    <update id="updateFaceData">
-        update empolyee set face_image_data = #{faceImageData} where id=#{id}
     </update>
 
     <select id="queryForList" resultMap="empRst" parameterType="cn.wolfcode.rbac.domain.query.EmployeeQueryObject">

@@ -56,13 +56,23 @@ export default {
           name: "系统管理",
           children: [
             {
+              id: 8,
+              name: "课程管理",
+              path: "/course"
+            },
+            {
+              id: 9,
+              name: "教学班管理",
+              path: "/class"
+            },
+            {
               id: 10,
-              name: "部门管理",
+              name: "班级管理",
               path: "/department"
             },
             {
               id: 11,
-              name: "员工管理",
+              name: "用户管理",
               path: "/employee"
             },
             {
@@ -77,13 +87,23 @@ export default {
             },
             {
               id: 14,
+              name: "签到发布",
+              path: '/attendance'
+            },
+            {
+              id: 15,
               name: "人脸上传",
               path: '/face'
             },
             {
-              id: 15,
+              id: 16,
               name: "人脸识别",
               path: '/recognition'
+            },
+            {
+              id: 17,
+              name: "签到",
+              path: '/signin'
             },
 
           ],

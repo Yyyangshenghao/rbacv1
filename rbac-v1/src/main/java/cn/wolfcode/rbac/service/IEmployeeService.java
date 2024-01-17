@@ -17,5 +17,4 @@ public interface IEmployeeService {
     void updateStateById(AdminStateVo adminStateVo);
     Employee selectById(Long id);
 
-    void updateFaceData(Long employeeId, String faceImageData);
 }

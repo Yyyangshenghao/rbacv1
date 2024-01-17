@@ -21,7 +21,6 @@ public interface EmployeeMapper {
     //根据员工id更新员工
     int updateById(Employee employee);
     // 更新员工管理员状态
-    int updateFaceData(Long id, String faceImageData);
     int updateStateById(@Param("id") Long id,@Param("admin") boolean admin);
     // 查询分页数据
     List<Employee> queryForList(EmployeeQueryObject qo);
