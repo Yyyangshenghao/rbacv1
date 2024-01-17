@@ -52,7 +52,6 @@ export default {
         const payload = {
           base64Image: base64Image,
           employeeId: this.employeeId,
-          // 可以添加其他需要的数据
         };
         const response = await this.$http.post('/image/upload-image', payload);
         if(response.data.status === 'fail'){
@@ -82,8 +81,9 @@ export default {
     },
 
   },
-  mounted() {
+  created: function() {
     this.setupCamera();
+    this.sendImageToBackend();
   }
 };
 </script>

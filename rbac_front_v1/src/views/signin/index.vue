@@ -1,6 +1,5 @@
 <template>
   <div class="sign-in">
-    <!-- ...其他代码... -->
     <el-table :data="activeAttendances" style="width: 100%">
       <el-table-column prop="id" label="签到id"></el-table-column>
       <el-table-column prop="courseName" label="课程名"></el-table-column>
@@ -11,11 +10,17 @@
       <!-- 签到操作列 -->
       <el-table-column fixed="right" label="操作">
         <template v-slot="scope">
-          <el-button type="primary" size="small" @click="handleSignIn(scope.row)">签到</el-button>
+          <el-button
+              type="primary"
+              size="small"
+              :disabled="scope.row.signedIn"
+              @click="handleSignIn(scope.row)"
+          >
+            {{ scope.row.buttonText }}
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <!-- ...其他代码... -->
   </div>
 </template>
 
@@ -23,12 +28,10 @@
 export default {
   data() {
     return {
-      // ...其他数据...
       activeAttendances: [], // 存储正在进行中的签到信息
     };
   },
   methods: {
-    // ...其他方法...
     // 获取学生相关的签到信息
     async getActiveAttendances() {
       const studentId = sessionStorage.getItem("userId")// 获取学生ID的逻辑;
@@ -38,7 +41,8 @@ export default {
           // 过滤状态为0的记录
           this.activeAttendances = res.data.filter(item => item.status === 0).map(item => ({
             ...item,
-            status: '正在进行中' // 将状态 '0' 转换为文本
+            status: '正在进行中',// 将状态 '0' 转换为文本
+            buttonText: '签到'
           }));
         } else {
           this.$message.error('获取签到信息失败');
@@ -53,8 +57,18 @@ export default {
       this.$router.push({ path: '/recognition', query: { attendanceId: row.id } });
     },
   },
-  created() {
-    this.getActiveAttendances();
+  created:function () {
+    this.getActiveAttendances().then(() => {
+      const signedInId = this.$route.query.signedInId;
+      if (signedInId) {
+        const index = this.activeAttendances.findIndex(item => item.id === parseInt(signedInId));
+        if (index !== -1) {
+          this.activeAttendances[index].signedIn = true; // 标记为已签到
+          this.activeAttendances[index].status = '已完成'; // 更新签到状态
+          this.activeAttendances[index].buttonText = '已完成'; // 更新按钮文本
+        }
+      }
+    });
   }
 };
 </script>

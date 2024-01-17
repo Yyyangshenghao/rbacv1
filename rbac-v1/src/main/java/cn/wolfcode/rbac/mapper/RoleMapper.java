@@ -1,10 +1,11 @@
 package cn.wolfcode.rbac.mapper;
 
 import cn.wolfcode.rbac.domain.Role;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@Mapper
 public interface RoleMapper {
     int deleteByPrimaryKey(Long id);
     int insert(Role record);

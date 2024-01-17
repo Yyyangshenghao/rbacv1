@@ -1,13 +1,11 @@
 package cn.wolfcode.rbac.service.impl;
 
 import cn.wolfcode.rbac.domain.Attendance;
-import cn.wolfcode.rbac.domain.vo.AttendanceRequest;
-import cn.wolfcode.rbac.domain.vo.PageResult;
-import cn.wolfcode.rbac.domain.vo.Signin;
-import cn.wolfcode.rbac.domain.vo.StudentSignIn;
+import cn.wolfcode.rbac.domain.vo.*;
 import cn.wolfcode.rbac.mapper.AttendanceMapper;
 import cn.wolfcode.rbac.service.IAttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,8 +45,15 @@ public class AttendanceServiceImpl implements IAttendanceService {
     }
 
     @Override
-    public void updateAtt(int attendanceId) {
-        attendanceMapper.updateAtt(attendanceId);
+    public void updateAtt(SignVo signVo) {
+        attendanceMapper.updateAtt(signVo);
     }
+
+//    @Scheduled(cron = "* * * * * ?")//每秒触发
+//    @Transactional
+//    public void updateExpiredAttendances() {
+//       // 如果有，执行更新
+//        attendanceMapper.updateExpiredAttendances();
+//    }
 
 }

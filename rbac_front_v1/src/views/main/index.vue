@@ -29,13 +29,14 @@
               <span>{{ item.name }}</span>
             </template>
             <el-menu-item
-              :index="subitem.path + ''"
-              :key="subitem.id + ''"
-              v-for="subitem in item.children"
+                :index="subitem.path"
+                :key="subitem.id"
+                v-for="subitem in item.children"
             >
-              <i class="el-icon-menu"></i>
-              <span>{{ subitem.name }}</span>
+              <i :class="`el-icon-${subitem.icon}`"></i>
+              <span slot="title">{{ subitem.name }}</span>
             </el-menu-item>
+
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -53,73 +54,39 @@ export default {
       menulist: [
         {
           id: 1,
-          name: "系统管理",
+          name: "教务处",
           children: [
-            {
-              id: 8,
-              name: "课程管理",
-              path: "/course"
-            },
-            {
-              id: 9,
-              name: "教学班管理",
-              path: "/class"
-            },
-            {
-              id: 10,
-              name: "班级管理",
-              path: "/department"
-            },
-            {
-              id: 11,
-              name: "用户管理",
-              path: "/employee"
-            },
-            {
-              id: 12,
-              name: "角色管理",
-              path: "/role"
-            },
-            {
-              id: 13,
-              name: "权限管理",
-              path: '/permission'
-            },
-            {
-              id: 14,
-              name: "签到发布",
-              path: '/attendance'
-            },
-            {
-              id: 15,
-              name: "签到情况",
-              path: '/attresult'
-            },
-            {
-              id: 16,
-              name: "人脸上传",
-              path: '/face'
-            },
-            {
-              id: 17,
-              name: "人脸识别",
-              path: '/recognition'
-            },
-            {
-              id: 18,
-              name: "签到",
-              path: '/signin'
-            },
-
+            { id: 8, name: "课程管理", path: "/course", icon: "s-management" },
+            { id: 9, name: "教学班管理", path: "/class", icon: "s-custom"},
+            { id: 10, name: "班级管理", path: "/department", icon: "s-cooperation" },
+            { id: 11, name: "用户管理", path: "/employee",icon: "s-platform" },
+            { id: 12, name: "角色管理", path: "/role", icon: "s-promotion" },
+            { id: 13, name: "权限管理", path: "/permission", icon: "s-operation" },
+          ],
+        },
+        {
+          id: 2,
+          name: "教师",
+          children: [
+            { id: 14, name: "签到发布", path: "/attendance",icon: "edit-outline"},
+            { id: 15, name: "签到情况", path: "/attresult",icon:"document"},
+          ],
+        },
+        {
+          id: 3,
+          name: "学生",
+          children: [
+            { id: 16, name: "人脸上传", path: "/face", icon:"upload2" },
+            // { id: 17, name: "人脸识别", path: "/recognition" },
+            { id: 18, name: "签到", path: "/signin", icon:"check"},
           ],
         },
       ],
+
       objicons: [
         "iconfont icon-users",
         "iconfont icon-tijikongjian",
         "iconfont icon-shangpin",
-        "iconfont icon-danju",
-        "iconfont icon-baobiao",
       ],
       isCollapse: false,
     };

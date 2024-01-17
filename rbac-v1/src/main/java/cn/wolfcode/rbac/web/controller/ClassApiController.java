@@ -5,6 +5,7 @@ import cn.wolfcode.rbac.domain.query.QueryObject;
 import cn.wolfcode.rbac.domain.vo.PageResult;
 import cn.wolfcode.rbac.domain.vo.R;
 import cn.wolfcode.rbac.service.IClassService;
+import cn.wolfcode.rbac.utils.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class ClassApiController {
 
     @GetMapping("/list")
     @ResponseBody
+    @RequirePermission({"教学班列表","class:list"})
     public R list(QueryObject qo){
         PageResult<Class> pageResult = classService.selectByPage(qo);
         return R.ok(pageResult);
@@ -27,6 +29,7 @@ public class ClassApiController {
 
     @GetMapping("/listForTeacher/{teacherId}")
     @ResponseBody
+    @RequirePermission({"选择教学班","class:listForTeacher"})
     public R list(@PathVariable Long teacherId){
         List<Class> selectResult = classService.selectById(teacherId);
         return R.ok(selectResult);

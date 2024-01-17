@@ -105,8 +105,8 @@ export default {
       // 构建请求体，包含选择的教学班ID、开始时间和结束时间
       const requestBody = {
         classId: this.signInForm.classId,
-        startTime: this.signInForm.start_time,
-        endTime: this.signInForm.end_time,
+        startTime: new Date(this.signInForm.start_time).toISOString(),
+        endTime: new Date(this.signInForm.end_time).toISOString(),
       };
       try {
         const { data: res } = await this.$http.post('/attendance/publish', requestBody);
@@ -122,7 +122,7 @@ export default {
     },
     // ...其他方法
   },
-  created() {
+  created: function () {
     this.getTeacherClasses(); // 在组件创建时获取教学班列表
   }
 };

@@ -2,6 +2,7 @@ package cn.wolfcode.rbac.service;
 
 import cn.wolfcode.rbac.domain.Attendance;
 import cn.wolfcode.rbac.domain.vo.AttendanceRequest;
+import cn.wolfcode.rbac.domain.vo.SignVo;
 import cn.wolfcode.rbac.domain.vo.Signin;
 import cn.wolfcode.rbac.domain.vo.StudentSignIn;
 
@@ -17,5 +18,6 @@ public interface IAttendanceService {
 
     List<StudentSignIn> list(Long studentId);
 
-    void updateAtt(int attendanceId);
+    void updateAtt(SignVo signVo);
+
 }

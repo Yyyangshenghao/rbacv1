@@ -8,10 +8,18 @@
         INSERT INTO attendance (class_id, status, start_time, end_time) VALUES (#{classId}, 0, #{startTime}, #{endTime})
     </insert>
 
-    <update id="updateAtt" parameterType="int">
+    <update id="updateAtt" parameterType="cn.wolfcode.rbac.domain.vo.SignVo">
         UPDATE attendance_student
         SET status = 1
-        WHERE attendance_id = #{attendanceId}
+        WHERE attendance_id = #{attendanceId} AND employee_id = #{employeeId}
+    </update>
+
+    <update id="updateExpiredAttendances">
+         <![CDATA[
+        UPDATE attendance
+        SET status = 1
+        WHERE status = 0 AND end_time < NOW()
+        ]]>
     </update>
 
     <select id="selectStudentIdsByClassId" parameterType="int" resultType="java.lang.Long">
@@ -37,6 +45,7 @@
         FROM attendance
         WHERE class_id = #{classId}
     </select>
+
 
     <select id="getSignin" parameterType="int" resultType="cn.wolfcode.rbac.domain.vo.Signin">
         SELECT attendance_id, employee_id, name, status
@@ -64,5 +73,4 @@
         WHERE
             cs.employee_id = #{employeeId}
     </select>
-
 </mapper>

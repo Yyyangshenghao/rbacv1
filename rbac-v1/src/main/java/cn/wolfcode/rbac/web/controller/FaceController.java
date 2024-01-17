@@ -6,6 +6,7 @@ import cn.wolfcode.rbac.domain.vo.TrainRequest;
 import cn.wolfcode.rbac.service.impl.FaceServiceImpl;
 import cn.wolfcode.rbac.utils.FaceUtils;
 import cn.wolfcode.rbac.utils.ObsUtils;
+import cn.wolfcode.rbac.utils.RequirePermission;
 import com.obs.services.exception.ObsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ public class FaceController{
 
 
     @PostMapping("/train")
+    @RequirePermission({"训练人脸数据","face:train"})
     public R trainPhotos(@RequestBody TrainRequest trainRequest) {
         if (trainRequest == null || trainRequest.getEmployeeId() == null) {
             return R.error("请求参数无效");
@@ -72,6 +74,7 @@ public class FaceController{
     }
 
     @PostMapping("/recognize")
+    @RequirePermission({"人脸辨认","face:recognize"})
     public R recognizeFace(@RequestBody RecognitionRequest recognitionRequest){
         try {
             //从Obs下载模型到本地保存

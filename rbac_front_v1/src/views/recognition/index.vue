@@ -13,7 +13,7 @@
 export default {
   data() {
     return {
-      attendanceId: ''
+      attendanceId: '',
     };
   },
   mounted() {
@@ -22,8 +22,11 @@ export default {
   },
 
   beforeDestroy() {
-    clearInterval(this.intervalId);
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   },
+
 
   methods: {
     // 设置摄像头
@@ -39,6 +42,7 @@ export default {
     startFaceDetection() {
       this.intervalId = setInterval(this.captureAndRecognize, 1000); // 每秒检测一次
     },
+
 
     // 捕获图像并进行人脸识别
     async captureAndRecognize() {
@@ -57,6 +61,8 @@ export default {
         });
         if (response.data.status === "success") {
           alert("签到成功！");
+          clearInterval(this.intervalId); // 识别成功后停止定时器
+          this.intervalId = null; // 清除定时器ID
           await this.updateAttendanceRecord();
         }
       } catch (error) {
@@ -66,13 +72,16 @@ export default {
     // 更新出勤记录的方法
     async updateAttendanceRecord() {
       try {
-        let attendanceId = this.attendanceId;
+        let payload = {
+          attendanceId: this.attendanceId,
+          employeeId: window.sessionStorage.getItem("userId")
+        }
         // 使用反引号 ` 来确保模板字符串正确工作
-        const { data: res } = await this.$http.post(`/attendance/update/${attendanceId}`);
+        const { data: res } = await this.$http.post("/attendance/update", payload);
         // 检查响应中的状态
         if (res.code === 200) {
-          alert('签到记录更新成功');
-          // 在这里添加其他成功后的逻辑
+          this.$router.push({ path: '/signin', query: { signedInId: this.attendanceId } });
+
         } else {
           // 处理更新失败的情况
           alert('签到记录更新失败: ' + updateResponse.data.msg);
@@ -83,9 +92,11 @@ export default {
     }
 
   },
-  created() {
+
+  created:function () {
     this.attendanceId = this.$route.query.attendanceId;
-    // 在这里你可以根据 attendanceId 做进一步的操作
   }
+
 };
+
 </script>

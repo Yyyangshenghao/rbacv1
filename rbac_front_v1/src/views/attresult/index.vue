@@ -2,7 +2,7 @@
   <div class="view-attendance-sessions">
     <el-card class="box-card">
       <div slot="header" class="header">
-        <span>查看签到会话</span>
+        <span>查看签到情况</span>
       </div>
 
       <el-form :model="attendanceForm" label-position="top">
@@ -123,7 +123,7 @@ export default {
         if (res.code == 200) {
           this.attendanceSessions = res.data.map(item => ({
             id: item.id,
-            status: (item.status ? "已完成" : "正在进行中"),
+            status: (item.status ? "已结束" : "正在进行中"),
             // startTime: item.start_time,
             // endTime: item.end_time,
           }));
@@ -166,7 +166,7 @@ export default {
     },
   },
 
-  created() {
+  created: function () {
     this.getTeacherClasses(); // 初始化时获取教学班列表
   }
 };

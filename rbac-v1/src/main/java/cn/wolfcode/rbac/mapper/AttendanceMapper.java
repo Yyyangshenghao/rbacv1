@@ -2,6 +2,7 @@ package cn.wolfcode.rbac.mapper;
 
 import cn.wolfcode.rbac.domain.Attendance;
 import cn.wolfcode.rbac.domain.vo.AttendanceRequest;
+import cn.wolfcode.rbac.domain.vo.SignVo;
 import cn.wolfcode.rbac.domain.vo.Signin;
 import cn.wolfcode.rbac.domain.vo.StudentSignIn;
 import org.apache.ibatis.annotations.Mapper;
@@ -31,5 +32,8 @@ public interface AttendanceMapper {
 
     List<StudentSignIn> listforstudent(Long employeeId);
 
-    int updateAtt(int attendanceId);
+    int updateAtt(SignVo signVo);
+
+//    void updateExpiredAttendances();
+
 }

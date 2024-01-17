@@ -5,6 +5,7 @@ import cn.wolfcode.rbac.domain.vo.ImageUploadRequest;
 import cn.wolfcode.rbac.domain.vo.R;
 import cn.wolfcode.rbac.service.IFaceService;
 import cn.wolfcode.rbac.utils.ObsUtils;
+import cn.wolfcode.rbac.utils.RequirePermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class ImageUploadController {
     private IFaceService faceService;
 
     @PostMapping("/upload-image")
+    @RequirePermission({"上传人脸","image:upload"})
     public R uploadImage(@RequestBody ImageUploadRequest request) {
         try {
             String base64Image = request.getBase64Image();
