@@ -92,16 +92,21 @@ export default {
             },
             {
               id: 15,
+              name: "签到情况",
+              path: '/attresult'
+            },
+            {
+              id: 16,
               name: "人脸上传",
               path: '/face'
             },
             {
-              id: 16,
+              id: 17,
               name: "人脸识别",
               path: '/recognition'
             },
             {
-              id: 17,
+              id: 18,
               name: "签到",
               path: '/signin'
             },

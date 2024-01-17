@@ -23,4 +23,20 @@
     <select id="selectByClId" parameterType="int" resultType="Integer">
         SELECT id FROM attendance WHERE class_id = #{classId} ORDER BY id DESC LIMIT 1
     </select>
+
+    <select id="getAttendance" parameterType="int" resultType="cn.wolfcode.rbac.domain.Attendance">
+        SELECT id, status,
+               CONVERT_TZ(start_time, '+00:00', '+08:00') AS start_time,
+               CONVERT_TZ(end_time, '+00:00', '+08:00') AS end_time
+        FROM attendance
+        WHERE class_id = #{classId}
+    </select>
+
+    <select id="getSignin" parameterType="int" resultType="cn.wolfcode.rbac.domain.vo.Signin">
+        SELECT attendance_id, employee_id, name, status
+        FROM attendance_student
+        JOIN employee ON employee_id = id
+        WHERE attendance_id = #{attendanceId}
+    </select>
+
 </mapper>

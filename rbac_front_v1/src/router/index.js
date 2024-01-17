@@ -15,6 +15,8 @@ import Course from "@/views/course";
 import Class from "@/views/class";
 import Attendance from "@/views/attendance";
 import Signin from "@/views/signin";
+import Result from "@/views/attresult";
+import Attresult from "@/views/attresult";
 Vue.use(VueRouter)
 
 const routes = [{
@@ -80,6 +82,10 @@ const routes = [{
       {
         path: "/signin",
         component: Signin
+      },
+      {
+        path: "/attresult",
+        component: Attresult
       },
     ]
   },

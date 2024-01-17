@@ -1,6 +1,9 @@
 package cn.wolfcode.rbac.service.impl;
 
+import cn.wolfcode.rbac.domain.Attendance;
 import cn.wolfcode.rbac.domain.vo.AttendanceRequest;
+import cn.wolfcode.rbac.domain.vo.PageResult;
+import cn.wolfcode.rbac.domain.vo.Signin;
 import cn.wolfcode.rbac.mapper.AttendanceMapper;
 import cn.wolfcode.rbac.service.IAttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,4 +28,16 @@ public class AttendanceServiceImpl implements IAttendanceService {
         // 为每个学生添加签到记录
         attendanceMapper.insertAttendanceStudents(id, studentIds);
     }
+
+    @Override
+    public List<Attendance> getAttendancelist(int classId){
+//        System.out.println(attendanceMapper.getAttendance(classId));
+        return attendanceMapper.getAttendance(classId);
+    }
+
+    @Override
+    public List<Signin> getSignin(int attendanceId) {
+        return attendanceMapper.getSignin(attendanceId);
+    }
+
 }
