@@ -20,7 +20,7 @@ public class FaceUtils {
     static {System.loadLibrary(Core.NATIVE_LIBRARY_NAME);}
 
     // 置信度阈值
-    private static final double CONFIDENCE_THRESHOLD = 50.0; // 示例阈值
+    private static final double CONFIDENCE_THRESHOLD = 34.0; // 示例阈值
 
     private CascadeClassifier faceDetector;
 
@@ -120,7 +120,7 @@ public class FaceUtils {
             // 使用detectAndCropFace方法来检测和裁剪人脸
             byte[] faceBytes = detectAndCropFace(imageBytes);
             if (faceBytes == null) {
-                return false; //没有检测到人脸
+                return false; // 没有检测到人脸
             }
 
             // 将裁剪后的人脸字节数组转换成OpenCV的Mat对象
@@ -137,13 +137,13 @@ public class FaceUtils {
             // 进行人脸识别
             faceRecognizer.predict(face, label, confidence);
 
-            // 检查置信度
-            return confidence[0] < CONFIDENCE_THRESHOLD; // 置信度低于阈值，认为识别成功
-
+            // 检查置信度，如果置信度低于阈值且预测标签有效，则认为识别成功
+            return confidence[0] < CONFIDENCE_THRESHOLD && label[0] != -1;
         } catch (Exception e) {
             e.printStackTrace();
             return false; // 在发生异常时返回false
         }
     }
+
 
 }
