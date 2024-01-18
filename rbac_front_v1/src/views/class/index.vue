@@ -6,14 +6,36 @@
       <el-breadcrumb-item>教学班列表</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card class="box-card">
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-input placeholder="输入教学班名称" v-model="queryInfo.keyword">
+          </el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-button type="primary" @click="doQuery">查询</el-button>
+        </el-col>
+        <el-col :span="4">
+          <el-button type="primary" @click="dialogFormVisible = true">添加教学班</el-button>
+        </el-col>
+      </el-row>
       <el-table :data="classList" stripe border>
-        <el-table-column type="index" label="序号"></el-table-column>
+        <el-table-column type="index"></el-table-column>
         <el-table-column prop="id" label="教学班ID" width="100"></el-table-column>
         <el-table-column prop="courseName" label="课程名称" width="200"></el-table-column>
-        <el-table-column prop="teacherName" label="教师名称" width="200"></el-table-column>
+        <el-table-column prop="teacherName" label="教师名称" width="100"></el-table-column>
         <el-table-column prop="classname" label="教学班名称" width="200"></el-table-column>
         <el-table-column prop="classroom" label="教室" width="150"></el-table-column>
         <el-table-column prop="time" label="上课时间" width="200"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" content="编辑教学班" placement="top">
+              <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row)"></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="删除教学班" placement="top">
+              <el-button type="warning" icon="el-icon-delete" size="mini" @click="deleteDialog(scope.row.id)"></el-button>
+            </el-tooltip>
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination
           @size-change="handleSizeChange"
@@ -25,6 +47,7 @@
           :total="totalCount">
       </el-pagination>
     </el-card>
+    <!-- Add/Edit Dialogs here (similar to the course management code) -->
   </div>
 </template>
 

@@ -34,6 +34,6 @@ public interface AttendanceMapper {
 
     int updateAtt(SignVo signVo);
 
-//    void updateExpiredAttendances();
+    void updateExpiredAttendances();
 
 }

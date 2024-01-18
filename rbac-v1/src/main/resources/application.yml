@@ -5,6 +5,7 @@ spring:
     username: root
     password: qq2471117875
 
+
   servlet:
     multipart:
       max-request-size: 100MB

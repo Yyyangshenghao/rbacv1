@@ -49,11 +49,11 @@ public class AttendanceServiceImpl implements IAttendanceService {
         attendanceMapper.updateAtt(signVo);
     }
 
-//    @Scheduled(cron = "* * * * * ?")//每秒触发
-//    @Transactional
-//    public void updateExpiredAttendances() {
-//       // 如果有，执行更新
-//        attendanceMapper.updateExpiredAttendances();
-//    }
+    @Scheduled(cron = "* * * * * ?")//每秒触发
+    @Transactional
+    public void updateExpiredAttendances() {
+       // 如果有，执行更新
+        attendanceMapper.updateExpiredAttendances();
+    }
 
 }

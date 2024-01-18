@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-//@EnableScheduling // 开启定时任务支持
+@EnableScheduling // 开启定时任务支持
 @MapperScan("cn.wolfcode.rbac.mapper")
 public class RbacApplication {
     public static void main(String[] args) {
