@@ -12,9 +12,9 @@ import java.io.*;
 @Component
 public class ObsUtils {
     //    private String ak = System.getenv("ACCESS_KEY_ID");
-    private String ak = "RVUPLCJVDV7ZIH5Y9XEF";
+    private String ak = "";
     //    private String sk = System.getenv("SECRET_ACCESS_KEY_ID");
-    private String sk = "Cen2Sy1tIq9YRmbfEDI6QSSzyGpiCd2LC5ftgLgc";
+    private String sk = "";
     private String endpoint = "https://obs.cn-east-3.myhuaweicloud.com";
 
     private ObsClient createObsClient() {
